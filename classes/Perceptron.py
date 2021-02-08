@@ -4,7 +4,7 @@
 class Perceptron:
     """Perceptron class. To initialise, takes a list of weights, an activation function and a bias (optional).
     Once initialised, can be activated by giving a list of inputs (with equal elements to the amount of weights)"""
-    def __init__(self,weights: list, activation: callable, ID="X", bias=0.0):
+    def __init__(self,weights: list, activation: callable, ID=0, bias=0.0):
         """Initialises the perceptron."""
         # FUNCTIONAL VARIABLES
         self.weights = weights
