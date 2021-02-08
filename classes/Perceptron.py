@@ -49,4 +49,4 @@ class Perceptron:
             print("INPUT: {}".format(self.input))
             print("OUTPUT: {}".format(self.output))
         else:
-            print("ACTIVATION PENDING")
+            print("ACTIVATION PENDING/FAILED")
