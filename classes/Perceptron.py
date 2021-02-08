@@ -12,14 +12,15 @@ class Perceptron:
         self.bias = bias
 
         # LOGGING VARIABLES
-        self.ID = ID
-        self.input = []
-        self.output = 0
+        self.ID = ID  # Identifier for Perceptron, for debugging.
+        self.hasrun = False  # Whether the neuron has been activated or not.
+        self.input = []  # Inputs of the previous activation
+        self.output = 0  # Output of the previous activation
 
     def activate(self,inputs: list):
         """Activates the Perceptron by supplying inputs."""
         # PRECHECKS
-        if not len(inputs) == len(self.weights):
+        if not len(inputs) == self.connections:
             raise Exception("Amount of inputs is not equal to the amount of weights @ Perceptron {}".format(self.ID))
         # PROCESSING
         weightedlist = []  # List with processed inputs (input*weight)
@@ -29,7 +30,23 @@ class Perceptron:
 
         output = self.activation(sum(weightedlist)+self.bias)
         # Consider evaluation succesful past this point; get logging variables.
+        self.hasrun = True
         self.input = inputs
         self.output = output
 
         return output
+
+    def __str__(self):
+        """Returns a string representing the object and it's variables."""
+        print("PERCEPTRON ID: {}\n\n".format(self.ID))
+
+        print("WEIGHTS: {}\n".format(self.weights))
+        print("ACTIVATION: {}\n".format(self.activation.__name__))
+        print("BIAS: {}\n".format(self.bias))
+
+        if self.hasrun:
+            print("SUCCESFUL ACTIVATION \n\n".format(self.hasrun))
+            print("INPUT: {}".format(self.input))
+            print("OUTPUT: {}".format(self.output))
+        else:
+            print("ACTIVATION PENDING")
