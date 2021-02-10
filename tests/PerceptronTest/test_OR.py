@@ -5,6 +5,7 @@ from classes.Perceptron import Perceptron
 
 class Perceptron_OR(unittest.TestCase):
     """Tests the Perceptron class by building a OR logic gate Perceptron"""
+
     def setUp(self):
         """Prepares a OR-type Perceptron"""
         self.OR_Perceptron = Perceptron([0.5, 0.5], Step(0.5).activate, "OR")
