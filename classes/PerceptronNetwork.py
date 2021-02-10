@@ -28,7 +28,7 @@ class PerceptronNetwork:
             raise Exception("Perceptron Network objects cannot be reused.")
         totalinputs = inputs.copy()
         for layer in self.hiddenlayers:
-            temp = totalinputs.copy()
+            temp = totalinputs.copy()  # For debugging.
             totalinputs = listmultiplier(totalinputs, layer.neuroncount)
             layer.activate(totalinputs)
             totalinputs = layer.outputs.copy()
