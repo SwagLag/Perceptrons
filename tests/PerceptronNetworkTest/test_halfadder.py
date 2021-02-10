@@ -23,12 +23,11 @@ class PerceptronNetwork_Halfadder(unittest.TestCase):
 
         self.ntwrk = PerceptronNetwork([l1,l2])
 
-    def test_HA_sum1(self):
+    def test_HA_sum(self):
         """Tests some scenario's in which the output of sum would be high (1), and the carry low (0)"""
         outcome = self.ntwrk.feed_forward([0,1])
         self.assertEqual(outcome, [1,0])
 
-    def test_HA_sum2(self):
         outcome = self.ntwrk.feed_forward([1,0])
         self.assertEqual(outcome, [1,0])
 

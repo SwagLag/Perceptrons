@@ -21,20 +21,18 @@ class PerceptronNetwork_XOR(unittest.TestCase):
 
         self.ntwrk = PerceptronNetwork([l1,l2])
 
-    def test_XOR_high1(self):
+    def test_XOR_high(self):
         """Tests some scenario's in which the output would be high (1)"""
         outcome = self.ntwrk.feed_forward([0,1])
         self.assertEqual(outcome, [1])
 
-    def test_XOR_high2(self):
         outcome = self.ntwrk.feed_forward([1,0])
         self.assertEqual(outcome, [1])
 
-    def test_XOR_low1(self):
+    def test_XOR_low(self):
         """Tests some scenarios in which the output would be low (0)"""
         outcome = self.ntwrk.feed_forward([0,0])
         self.assertEqual(outcome, [0])
 
-    def test_XOR_low2(self):
         outcome = self.ntwrk.feed_forward([1,1])
         self.assertEqual(outcome, [0])

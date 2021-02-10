@@ -34,6 +34,7 @@ class PerceptronLayer:
     #         self.neuroncount += 1
 
     def activate(self, inputlist: List[List[int or float]]):
+        self.outputs = []
         for i in range(len(inputlist)):
             self.perceptrons[i].activate(inputlist[i])
             self.outputs.append(self.perceptrons[i].output)

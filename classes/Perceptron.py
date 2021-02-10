@@ -47,6 +47,10 @@ class Perceptron:
 
     def activate(self,inputs: list):
         """Activates the Perceptron by supplying inputs."""
+        # RESETS
+        self.hasrun = False
+        self.input = []
+        self.output = 0
         # PRECHECKS
         if not len(inputs) == len(self.__weights):
             raise Exception("Amount of inputs is not equal to the amount of weights @ Perceptron {}".format(self.ID))
