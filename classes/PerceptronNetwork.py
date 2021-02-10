@@ -23,14 +23,11 @@ class PerceptronNetwork:
 
     def feed_forward(self, inputs: List[int or float]):
         """Starts the network, and returns the output."""
-        # if self.hasrun:  # Temporary workaround for weird bug. THIS NEEDS TO BE FIXED BEFORE A LEARNING ALGORITHM
-        #                  # CAN BE APPLIED.
-        #     raise Exception("Perceptron Network objects cannot be reused.")
         totalinputs = inputs.copy()
         for layer in self.hiddenlayers:
-            temp = totalinputs.copy()  # For debugging.
             totalinputs = listmultiplier(totalinputs, layer.neuroncount)
-            totalinputs = layer.activate(totalinputs).copy()
+            layer.activate(totalinputs)
+            totalinputs = layer.outputs.copy()
 
         self.output = totalinputs
         return totalinputs
