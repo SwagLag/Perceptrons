@@ -11,12 +11,12 @@ class PerceptronNetwork_Halfadder(unittest.TestCase):
     # Layer 1 Perceptrons:
 
     def setUp(self):
-        n1 = Perceptron([0.5,0.5],Step(1).activate,"n1")
-        n2 = Perceptron([-0.1,-0.1],Step(0).activate,"n2")
-        n3 = Perceptron([0.5,0.5],Step(1).activate,"n3")
+        n1 = Perceptron([0.5,0.5],Step(0).activate,"n1",bias=-1)
+        n2 = Perceptron([-1,-1],Step(0).activate,"n2",bias=0)
+        n3 = Perceptron([0.5,0.5],Step(0).activate,"n3",bias=-1)
         # Layer 2 Perceptrons:
-        n4 = Perceptron([-1,-1,0],Step(-0.5).activate,"n4")
-        n5 = Perceptron([0,0,1],Step(1).activate,"n5")
+        n4 = Perceptron([-1,-1,0],Step(0).activate,"n4",bias=0)
+        n5 = Perceptron([0,0,1],Step(0).activate,"n5",bias=-1)
 
         l1 = PerceptronLayer(1,[n1,n2,n3])
         l2 = PerceptronLayer(2,[n4,n5])

@@ -8,7 +8,7 @@ class Perceptron_INVERT(unittest.TestCase):
 
     def setUp(self):
         """Prepares a INVERT-type Perceptron."""
-        self.INVERT_Perceptron = Perceptron([-1],Step(0).activate,"INVERT")
+        self.INVERT_Perceptron = Perceptron([-1],Step(0).activate,"INVERT",bias=0)
 
     def test_INVERT_high(self):
         """Tests a scenario in which a Perceptron - designed to be an INVERTER - returns a high output (1)"""

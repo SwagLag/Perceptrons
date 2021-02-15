@@ -11,10 +11,10 @@ class PerceptronNetwork_XOR(unittest.TestCase):
 
     def setUp(self):
         # Layer 1 Perceptrons:
-        n1 = Perceptron([0.5, 0.5], Step(1).activate, "n1")
-        n2 = Perceptron([-0.1, -0.1], Step(0).activate, "n2")
+        n1 = Perceptron([0.5, 0.5], Step(0).activate, "n1",bias=-1)
+        n2 = Perceptron([-0.1, -0.1], Step(0).activate, "n2",bias=0)
         # Layer 2 Perceptrons:
-        n3 = Perceptron([-1, -1], Step(-0.5).activate, "n3")
+        n3 = Perceptron([-1, -1], Step(0).activate, "n3",bias=0)
 
         l1 = PerceptronLayer(1, [n1,n2])
         l2 = PerceptronLayer(1, [n3])

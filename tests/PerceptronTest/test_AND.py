@@ -8,7 +8,7 @@ class Perceptron_AND(unittest.TestCase):
 
     def setUp(self):
         """Prepares a AND-type Perceptron"""
-        self.AND_Perceptron = Perceptron([0.5,0.5],Step(1).activate,"AND")
+        self.AND_Perceptron = Perceptron([0.5,0.5],Step(0).activate,"AND",bias=-1)
 
     def test_AND_high(self):
         """Tests a scenario in which a Perceptron - designed to be an AND port - returns a high output (1)"""

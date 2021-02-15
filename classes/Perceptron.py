@@ -1,10 +1,12 @@
 # Perceptron class. Takes a list of inputs, applies a list of weights to them, adds a bias,
 # then applies the sum of that to the activation function and returns an output.
 
+from typing import List, Union
+
 class Perceptron:
     """Perceptron class. To initialise, takes a list of weights, an activation function and a bias (optional).
     Once initialised, can be activated by giving a list of inputs (with equal elements to the amount of weights)"""
-    def __init__(self,weights: list, activation: callable, ID=0, bias=0.0):
+    def __init__(self,weights: List[Union[int, float]], activation: callable, ID=0, bias=0.0):
         """Initialises the perceptron."""
         # FUNCTIONAL VARIABLES (Private)
         self.__weights = weights
@@ -21,7 +23,7 @@ class Perceptron:
         """Returns the current weights."""
         return self.__weights
 
-    def setweights(self,weights: list):
+    def setweights(self,weights: List[Union[int, float]]):
         """Changes the weights on this perceptron by using a supplied weightslist.
         For proper use in the PerceptronLayer class, the input has to have the same
         amount of elements as the original weights list."""
@@ -37,15 +39,15 @@ class Perceptron:
         """Changes the activation function on this perceptron."""
         self.__activation = func
 
-    def getbias(self) -> int or float:
+    def getbias(self) -> Union[int, float]:
         """Returns the current bias for this perceptron."""
         return self.__bias
 
-    def setbias(self, b: int or float):
+    def setbias(self, b: Union[int, float]):
         """Changes the current bias on this perceptron."""
         self.__bias = b
 
-    def activate(self,inputs: list):
+    def activate(self,inputs: List[Union[int, float]]):
         """Activates the Perceptron by supplying inputs."""
         # RESETS
         self.hasrun = False
@@ -68,17 +70,20 @@ class Perceptron:
 
         return output
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Returns a string representing the object and it's variables."""
-        print("PERCEPTRON ID: {}\n\n".format(self.ID))
+        output = ""
+        output += "PERCEPTRON ID: {}\n\n".format(self.ID)
 
-        print("WEIGHTS: {}\n".format(self.getweights()))
-        print("ACTIVATION: {}\n".format(self.getactivation().__name__))
-        print("BIAS: {}\n".format(self.getbias()))
+        output += "WEIGHTS: {}\n".format(self.getweights())
+        output += "ACTIVATION: {}\n".format(self.getactivation().__name__)
+        output += "BIAS: {}\n".format(self.getbias())
 
         if self.hasrun:
-            print("SUCCESFUL ACTIVATION \n\n".format(self.hasrun))
-            print("INPUT: {}".format(self.input))
-            print("OUTPUT: {}".format(self.output))
+            output += "SUCCESFUL ACTIVATION \n\n".format(self.hasrun)
+            output += "INPUT: {}".format(self.input)
+            output += "OUTPUT: {}".format(self.output)
         else:
-            print("ACTIVATION PENDING/FAILED")
+            output += "ACTIVATION PENDING/FAILED"
+
+        return output

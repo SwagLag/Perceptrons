@@ -8,7 +8,7 @@ class Perceptron_OR(unittest.TestCase):
 
     def setUp(self):
         """Prepares a OR-type Perceptron"""
-        self.OR_Perceptron = Perceptron([0.5, 0.5], Step(0.5).activate, "OR")
+        self.OR_Perceptron = Perceptron([0.5, 0.5], Step(0).activate, "OR",bias=-0.5)
 
     def test_OR_high(self):
         """Tests some scenarios in which a Perceptron - designed to be an OR port - returns a high output (1)"""
