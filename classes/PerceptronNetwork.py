@@ -12,12 +12,14 @@ class PerceptronNetwork:
         self.input = []
         self.output = []
 
-    def feed_forward(self, inputs: List[Union[int,float]]):
+    def feed_forward(self, inputs: List[Union[int,float]]) -> List[Union[int,float]]:
         """Starts the network, feeds in the inputs, runs it through all the layers and returns the output
         of the final layer."""
-        totalinputs = inputs.copy()
+        totalinputs = inputs.copy()  # Keep both lists unlinked; original list will be saved for debugging.
         for layer in self.hiddenlayers:
             layer.activate(totalinputs)
-            totalinputs = layer.outputs.copy()
+            totalinputs = layer.outputs.copy()  # Same deal here
+
+        self.input = inputs
         self.output = totalinputs
         return totalinputs

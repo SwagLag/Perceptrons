@@ -12,7 +12,6 @@ class PerceptronLayer:
     def __init__(self, ID, perceptrons: List[Perceptron]):
         self.perceptrons = perceptrons
         self.outputs = []
-        self.neuroncount = len(perceptrons)
 
     def activate(self, inputlist: List[Union[int, float]]):
         """Runs the inputlist through all perceptrons of the network and saves the output."""

@@ -6,7 +6,7 @@ from typing import List, Union
 class Perceptron:
     """Perceptron class. To initialise, takes a list of weights, an activation function and a bias (optional).
     Once initialised, can be activated by giving a list of inputs (with equal elements to the amount of weights)"""
-    def __init__(self,weights: List[Union[int, float]], activation: callable, ID=0, bias=0.0):
+    def __init__(self,weights: List[Union[int, float]], activation: callable, ID=0, bias: Union[int,float] = 0.0):
         """Initialises the perceptron."""
         # FUNCTIONAL VARIABLES (Private)
         self.__weights = weights
@@ -19,7 +19,7 @@ class Perceptron:
         self.input = []  # Inputs of the previous activation
         self.output = 0  # Output of the previous activation
 
-    def getweights(self) -> list:
+    def getweights(self) -> List[Union[int, float]]:
         """Returns the current weights."""
         return self.__weights
 
@@ -47,7 +47,7 @@ class Perceptron:
         """Changes the current bias on this perceptron."""
         self.__bias = b
 
-    def activate(self,inputs: List[Union[int, float]]):
+    def activate(self,inputs: List[Union[int, float]]) -> Union[int,float]:
         """Activates the Perceptron by supplying inputs."""
         # RESETS
         self.hasrun = False
