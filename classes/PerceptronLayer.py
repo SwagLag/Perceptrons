@@ -18,4 +18,4 @@ class PerceptronLayer:
         self.outputs = []
         for i in self.perceptrons:
             i.activate(inputlist)
-            self.outputs.append(i.output)
+            self.outputs.append(i.output[-1])

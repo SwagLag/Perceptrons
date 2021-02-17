@@ -26,5 +26,4 @@ class Sigmoid:
         """Creates the object."""
 
     def activate(self, input: Union[int, float]):
-        return 1 / (1 + math.e ** input)
-
+        return 1 / (1 + (math.e ** -input))
