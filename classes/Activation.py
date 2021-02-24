@@ -11,7 +11,7 @@ import math
 class Step:
     """Step-based activation. If the sum of the input is above the treshold, the output is 1. Otherwise,
     the output is 0."""
-    def __init__(self, treshold: Union[int, float]):
+    def __init__(self, treshold: Union[int, float] = 0):
         self.treshold = treshold
 
     def activate(self, input: Union[int, float]):

@@ -16,8 +16,13 @@ class Perceptron:
 
         # LOGGING VARIABLES (Public)
         self.ID = ID  # Identifier for Perceptron, for debugging.
-        self.hasrun = False  # Whether the neuron has been activated or not.
+
         self.wastrained = False
+        self.epochs = 0
+        self.iterations = 0
+        self.trainingerror = 0
+
+        self.hasrun = False  # Whether the neuron has been activated or not.
         self.input = []  # Inputs of previous activations
         self.output = []  # Output of previous activations
 
@@ -76,15 +81,20 @@ class Perceptron:
 
         return output
 
-    def update(self, inputs:List[List[int]], actualoutput: List[int], maxiters: int= 40) -> None:
+    def update(self, inputs:List[List[int]], actualoutput: List[int], epochs: int = 40) -> None:
         """Calibrates the perceptron's weights based on a training set; it requires a list
         containing sets of inputs and a list containing the actual outputs. These are compared,
         and the perceptron learning rule is applied if necessary. An amount of maxiterations may
         be given as a failsafe to prevent a endless loop in case of a non-linear solvable problem."""
-        output = [None for i in range(len(actualoutput))]
+        self.wastrained = False
+        self.epochs = 0
+        self.iterations = 0
+        sumerror = len(actualoutput)
+
+        output = [0 for i in range(len(actualoutput))]
         weights = self.getweights()
 
-        while output != actualoutput and maxiters > 0:
+        while sumerror > 0 and epochs > 0:
             for i in range(len(inputs)):
                 self.activate(inputs[i])
                 output[i] = self.output[-1]
@@ -94,23 +104,25 @@ class Perceptron:
                     weights[j] += (self.getlearningrate() * error * inputs[i][j])
                 self.setbias(self.getbias() + (self.getlearningrate() * error))
                 self.setweights(weights)
-            maxiters -= 1
+                self.iterations += 1
+
+            sumerror = self.error(output,actualoutput)
+            epochs -= 1
+            self.epochs += 1
 
         self.wastrained = True
+        self.trainingerror = sumerror
 
-    def error(self, inputs:List[List[int]],actualoutputs:List[int]) -> float:
-        """Calculates the error of a perceptron."""
-        if not self.getactivation().__name__ == "Step":
-            raise NotImplementedError("@ Perceptron {}".format(self.ID))
-        if not len(inputs) == len(actualoutputs):
+    def error(self, outputs:List[int], actualoutputs:List[int]) -> float:
+        """Calculates the error of a perceptron's training set."""
+        if not len(outputs) == len(actualoutputs):
             raise Exception("Either not enough testinputs or true outputs. @ Perceptron {}".format(self.ID))
 
-        outputs = []
-        for indx in range(len(inputs)):
-            self.activate(inputs[indx])
-            outputs.append((actualoutputs[indx] - self.output[-1])**2)
+        sumoutputs = []
+        for indx in range(len(outputs)):
+            sumoutputs.append((actualoutputs[indx] - outputs[indx])**2)
 
-        return sum(outputs) / len(inputs)
+        return sum(sumoutputs) / len(outputs)
 
     def __str__(self) -> str:
         """Returns a string representing the object and it's variables."""
@@ -127,5 +139,14 @@ class Perceptron:
             output += "OUTPUT: {}\n".format(self.output)
         else:
             output += "ACTIVATION PENDING/FAILED\n"
+
+        if self.wastrained:
+            output += "TRAINING STATISTICS: \n\n"
+            output += "ITERATIONS: {}\n".format(self.iterations)
+            output += "EPOCHS: {}\n".format(self.epochs)
+            output += "MSE: {}\n".format(self.trainingerror)
+
+        else:
+            output += "NO TRAINING APPLIED\n"
 
         return output
