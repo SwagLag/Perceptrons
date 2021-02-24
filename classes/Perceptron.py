@@ -95,23 +95,23 @@ class Perceptron:
         weights = self.getweights()
 
         while sumerror > 0 and epochs > 0:
-            for i in range(len(inputs)):
-                self.activate(inputs[i])
-                output[i] = self.output[-1]
-                error = actualoutput[i] - self.output[-1]
-                weights = self.getweights()
-                for j in range(len(weights)):
+            for i in range(len(inputs)):  # Iterate over each input and expected output
+                self.activate(inputs[i])  # Put the input in the neuron
+                output[i] = self.output[-1]  # Extract the result
+                error = actualoutput[i] - self.output[-1]  # Calculate the error
+                weights = self.getweights()  # Get the current weights
+                for j in range(len(weights)):  # Mutate each weight; weight = learningrate * error * input
                     weights[j] += (self.getlearningrate() * error * inputs[i][j])
-                self.setbias(self.getbias() + (self.getlearningrate() * error))
+                self.setbias(self.getbias() + (self.getlearningrate() * error))  # bias = learningrate * error
                 self.setweights(weights)
                 self.iterations += 1
 
             sumerror = self.error(output,actualoutput)
             epochs -= 1
-            self.epochs += 1
+            self.epochs += 1  # For logging purposes
 
-        self.wastrained = True
-        self.trainingerror = sumerror
+        self.wastrained = True  # For logging purposes
+        self.trainingerror = sumerror  # For logging purposes; MSE > 0 implies failed training
 
     def error(self, outputs:List[int], actualoutputs:List[int]) -> float:
         """Calculates the error of a perceptron's training set."""
