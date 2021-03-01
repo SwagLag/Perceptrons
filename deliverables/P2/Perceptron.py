@@ -3,10 +3,13 @@
 
 from typing import List, Union
 
+
 class Perceptron:
     """Perceptron class. To initialise, takes a list of weights, an activation function and a bias (optional).
     Once initialised, can be activated by giving a list of inputs (with equal elements to the amount of weights)"""
-    def __init__(self, weights: List[Union[int, float]], activation: callable, ID=0, bias: Union[int,float] = 0.0, learningrate: Union[int,float] = 0.1):
+
+    def __init__(self, weights: List[Union[int, float]], activation: callable, ID=0, bias: Union[int, float] = 0.0,
+                 learningrate: Union[int, float] = 0.1):
         """Initialises the perceptron."""
         # FUNCTIONAL VARIABLES (Private)
         self.__weights = weights
@@ -30,18 +33,20 @@ class Perceptron:
         """Returns the current weights."""
         return self.__weights
 
-    def setweights(self,weights: List[Union[int, float]]):
+    def setweights(self, weights: List[Union[int, float]]):
         """Changes the weights on this perceptron by using a supplied weightslist.
         For proper use in the PerceptronLayer class, the input has to have the same
         amount of elements as the original weights list."""
         if not len(weights) == len(self.getweights()):
-            raise Exception("Amount of supplied weights does not equal the amount of current weights @ Perceptron {}".format(self.ID))
+            raise Exception(
+                "Amount of supplied weights does not equal the amount of current weights @ Perceptron {}".format(
+                    self.ID))
         self.__weights = weights
 
-    def getlearningrate(self) -> Union[int,float]:
+    def getlearningrate(self) -> Union[int, float]:
         return self.__learningrate
 
-    def setlearningrate(self, learningrate: Union[int,float]):
+    def setlearningrate(self, learningrate: Union[int, float]):
         self.__learningrate = learningrate
 
     def getactivation(self) -> callable:
@@ -60,7 +65,7 @@ class Perceptron:
         """Changes the current bias on this perceptron."""
         self.__bias = b
 
-    def activate(self,inputs: List[Union[int, float]]) -> Union[int,float]:
+    def activate(self, inputs: List[Union[int, float]]) -> Union[int, float]:
         """Activates the Perceptron by supplying inputs."""
         # RESETS
         self.hasrun = False
@@ -81,7 +86,7 @@ class Perceptron:
 
         return output
 
-    def update(self, inputs:List[List[int]], actualoutput: List[int], epochs: int = 40) -> None:
+    def update(self, inputs: List[List[int]], actualoutput: List[int], epochs: int = 40) -> None:
         """Calibrates the perceptron's weights based on a training set; it requires a list
         containing sets of inputs and a list containing the actual outputs. These are compared,
         and the perceptron learning rule is applied if necessary. An amount of maxiterations may
@@ -89,7 +94,7 @@ class Perceptron:
         self.wastrained = False
         self.epochs = 0
         self.iterations = 0
-        sumerror = len(actualoutput)
+        sumerror = 1.0
 
         output = [0 for i in range(len(actualoutput))]
         weights = self.getweights()
@@ -104,25 +109,38 @@ class Perceptron:
                     weights[j] += (self.getlearningrate() * error * inputs[i][j])
                 self.setbias(self.getbias() + (self.getlearningrate() * error))  # bias = learningrate * error
                 self.setweights(weights)
+
                 self.iterations += 1
 
-            sumerror = self.error(output,actualoutput)
+                sumerror = self.error(inputs, actualoutput)  # = MSE
+
+                if sumerror <= 0:  # If the current weights/bias result in a perfect execution
+                    break  # Stop training.
+
             epochs -= 1
             self.epochs += 1  # For logging purposes
 
         self.wastrained = True  # For logging purposes
         self.trainingerror = sumerror  # For logging purposes; MSE > 0 implies failed training
 
-    def error(self, outputs:List[int], actualoutputs:List[int]) -> float:
-        """Calculates the error of a perceptron's training set."""
-        if not len(outputs) == len(actualoutputs):
+    def error(self, inputs: List[List[int]], actualoutputs: List[int]) -> float:
+        """Calculates the MSE of this perceptron over a training set."""
+        if not len(inputs) == len(actualoutputs):
             raise Exception("Either not enough testinputs or true outputs. @ Perceptron {}".format(self.ID))
+        output = []
+
+        for input in inputs:
+            self.activate(input)
+            output.append(self.output[-1])
+            # Ugly, but we don't want this logged.
+            del self.input[-1]
+            del self.output[-1]
 
         sumoutputs = []
-        for indx in range(len(outputs)):
-            sumoutputs.append((actualoutputs[indx] - outputs[indx])**2)
+        for indx in range(len(output)):
+            sumoutputs.append((actualoutputs[indx] - output[indx]) ** 2)
 
-        return sum(sumoutputs) / len(outputs)
+        return sum(sumoutputs) / len(output)
 
     def __str__(self) -> str:
         """Returns a string representing the object and it's variables."""

@@ -89,7 +89,7 @@ class Perceptron:
         self.wastrained = False
         self.epochs = 0
         self.iterations = 0
-        sumerror = len(actualoutput)
+        sumerror = 1.0
 
         output = [0 for i in range(len(actualoutput))]
         weights = self.getweights()
@@ -104,25 +104,38 @@ class Perceptron:
                     weights[j] += (self.getlearningrate() * error * inputs[i][j])
                 self.setbias(self.getbias() + (self.getlearningrate() * error))  # bias = learningrate * error
                 self.setweights(weights)
+
                 self.iterations += 1
 
-            sumerror = self.error(output,actualoutput)
+                sumerror = self.error(inputs, actualoutput)  # = MSE
+
+                if sumerror <= 0:  # If the current weights/bias result in a perfect execution
+                    break  # Stop training.
+
             epochs -= 1
             self.epochs += 1  # For logging purposes
 
         self.wastrained = True  # For logging purposes
         self.trainingerror = sumerror  # For logging purposes; MSE > 0 implies failed training
 
-    def error(self, outputs:List[int], actualoutputs:List[int]) -> float:
-        """Calculates the error of a perceptron's training set."""
-        if not len(outputs) == len(actualoutputs):
+    def error(self, inputs:List[List[int]], actualoutputs:List[int]) -> float:
+        """Calculates the MSE of this perceptron over a training set."""
+        if not len(inputs) == len(actualoutputs):
             raise Exception("Either not enough testinputs or true outputs. @ Perceptron {}".format(self.ID))
+        output = []
+
+        for input in inputs:
+            self.activate(input)
+            output.append(self.output[-1])
+            # Ugly, but we don't want this logged.
+            del self.input[-1]
+            del self.output[-1]
 
         sumoutputs = []
-        for indx in range(len(outputs)):
-            sumoutputs.append((actualoutputs[indx] - outputs[indx])**2)
+        for indx in range(len(output)):
+            sumoutputs.append((actualoutputs[indx] - output[indx])**2)
 
-        return sum(sumoutputs) / len(outputs)
+        return sum(sumoutputs) / len(output)
 
     def __str__(self) -> str:
         """Returns a string representing the object and it's variables."""
