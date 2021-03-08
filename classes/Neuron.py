@@ -6,20 +6,27 @@ from typing import List, Union
 class Neuron:
     """Neuron class. To initialise, takes a list of weights, an activation function and a bias (optional).
     Once initialised, can be activated by giving a list of inputs (with equal elements to the amount of weights)"""
-    def __init__(self, weights: List[Union[int, float]], activation: callable, ID=0, bias: Union[int,float] = 0.0):
+    def __init__(self, weights: List[Union[int, float]], activation: callable, ID=0, bias: Union[int,float] = 0.0,
+                 learningrate: Union[int,float] = 0.3):
         """Initialises the neuron."""
         # FUNCTIONAL VARIABLES (Private)
         self.__weights = weights
         self.__activation = activation
         self.__bias = bias
+        self.__learningrate = learningrate
+
+        self.__newweights = []
+        self.__newbias = 0
 
         # LOGGING VARIABLES (Public)
         self.ID = ID  # Identifier for Perceptron, for debugging.
 
-        # self.wastrained = False
-        # self.epochs = 0
-        # self.iterations = 0
-        # self.trainingerror = 0
+        self.wastrained = False
+
+        self.epochs = 0
+        self.iterations = 0
+
+        self.error = 0  # Error calculated by the error methods.
 
         self.hasrun = False  # Whether the neuron has been activated or not.
         self.input = []  # Inputs of previous activations
@@ -37,11 +44,11 @@ class Neuron:
             raise Exception("Amount of supplied weights does not equal the amount of current weights @ Perceptron {}".format(self.ID))
         self.__weights = weights
 
-    # def getlearningrate(self) -> Union[int,float]:
-    #     return self.__learningrate
-    #
-    # def setlearningrate(self, learningrate: Union[int,float]):
-    #     self.__learningrate = learningrate
+    def getlearningrate(self) -> Union[int,float]:
+        return self.__learningrate
+
+    def setlearningrate(self, learningrate: Union[int,float]):
+        self.__learningrate = learningrate
 
     def getactivation(self) -> callable:
         """Returns the current activation function."""
@@ -80,6 +87,38 @@ class Neuron:
 
         return output
 
+    def erroroutput(self, target: Union[int,float]):
+        """Calculates the error of an output neuron."""
+        if not self.hasrun:
+            raise Exception("Run the Neuron first! @ Neuron {}".format(self.ID))
+        gradients = []
+        deltaweights = []
+        deltabias = 0
+        newweights = []
+        newbias = 0
+        # Bepaal de error
+        output = self.output[-1]
+        error = output * (1-output) * -(target-output)
+        for inp in self.input[-1]:
+            gradients.append(inp * error)  # De output van een voorgaande node is gelijk aan de input op deze node op de relevante index
+        for grad in gradients:
+            deltaweights.append(self.getlearningrate() * grad)
+        deltabias = self.getlearningrate()*error
+
+        self.__newweights = [self.__weights[i] - deltaweights[i] for i in range(len(self.getweights()))]
+        self.__newbias = self.getbias() - deltabias
+
+
+    def errorhidden(self):
+        """Calculates the error of a hidden layer neuron"""
+        if not self.hasrun:
+            raise Exception("Run the Neuron first! @ Neuron {}".format(self.ID))
+
+    def update(self):
+        """Updates the weights and bias using stored new weights and bias."""
+        self.setbias(self.__newbias)
+        self.setweights(self.__newweights)
+
     def __str__(self) -> str:
         """Returns a string representing the object and it's variables."""
         output = ""
@@ -95,14 +134,5 @@ class Neuron:
             output += "OUTPUT: {}\n".format(self.output)
         else:
             output += "ACTIVATION PENDING/FAILED\n"
-
-        # if self.wastrained:
-        #     output += "TRAINING STATISTICS: \n\n"
-        #     output += "ITERATIONS: {}\n".format(self.iterations)
-        #     output += "EPOCHS: {}\n".format(self.epochs)
-        #     output += "MSE: {}\n".format(self.trainingerror)
-        #
-        # else:
-        #     output += "NO TRAINING APPLIED\n"
 
         return output
