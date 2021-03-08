@@ -6,25 +6,18 @@ from typing import List, Union
 class Neuron:
     """Neuron class. To initialise, takes a list of weights, an activation function and a bias (optional).
     Once initialised, can be activated by giving a list of inputs (with equal elements to the amount of weights)"""
-    def __init__(self, weights: List[Union[int, float]], activation: callable, ID=0, bias: Union[int,float] = 0.0,
-                 learningrate: Union[int,float] = 0.3):
+    def __init__(self, weights: List[Union[int, float]], activation: callable, ID=0, bias: Union[int,float] = 0.0):
         """Initialises the neuron."""
         # FUNCTIONAL VARIABLES (Private)
         self.__weights = weights
         self.__activation = activation
         self.__bias = bias
-        self.__learningrate = learningrate
 
         self.__newweights = []
         self.__newbias = 0
 
         # LOGGING VARIABLES (Public)
         self.ID = ID  # Identifier for Perceptron, for debugging.
-
-        self.wastrained = False
-
-        self.epochs = 0
-        self.iterations = 0
 
         self.error = 0  # Error calculated by the error methods.
 
@@ -43,12 +36,6 @@ class Neuron:
         if not len(weights) == len(self.getweights()):
             raise Exception("Amount of supplied weights does not equal the amount of current weights @ Perceptron {}".format(self.ID))
         self.__weights = weights
-
-    def getlearningrate(self) -> Union[int,float]:
-        return self.__learningrate
-
-    def setlearningrate(self, learningrate: Union[int,float]):
-        self.__learningrate = learningrate
 
     def getactivation(self) -> callable:
         """Returns the current activation function."""
@@ -87,7 +74,7 @@ class Neuron:
 
         return output
 
-    def erroroutput(self, target: Union[int,float]):
+    def erroroutput(self, target: Union[int,float], learningrate: Union[int,float]):
         """Calculates the error of an output neuron."""
         if not self.hasrun:
             raise Exception("Run the Neuron first! @ Neuron {}".format(self.ID))
@@ -102,17 +89,39 @@ class Neuron:
         for inp in self.input[-1]:
             gradients.append(inp * error)  # De output van een voorgaande node is gelijk aan de input op deze node op de relevante index
         for grad in gradients:
-            deltaweights.append(self.getlearningrate() * grad)
-        deltabias = self.getlearningrate()*error
+            deltaweights.append(learningrate * grad)
+        deltabias = learningrate * error
 
+        self.error = error
         self.__newweights = [self.__weights[i] - deltaweights[i] for i in range(len(self.getweights()))]
         self.__newbias = self.getbias() - deltabias
 
-
-    def errorhidden(self):
+    def errorhidden(self, connections: List[Union[int,float]], errors: List[Union[int,float]], learningrate: Union[int,float]):
         """Calculates the error of a hidden layer neuron"""
         if not self.hasrun:
             raise Exception("Run the Neuron first! @ Neuron {}".format(self.ID))
+        if len(connections) != len(errors):
+            raise Exception("Amount of connections from this neuron should equal the amount of errors from neurons @ Neuron {}".format(self.ID))
+        gradients = []
+        deltaweights = []
+        deltabias = 0
+        newweights = []
+        newbias = 0
+        sum = 0  # Sum of (Wi,j * Delta(j))
+        # Bepaal de error
+        output = self.output[-1]
+        for i in range(len(connections)):  # Bepaal eerst de som van de vermenigvuldigingen tussen de verbindingen en de errors.
+            sum += connections[i] * errors[i]
+        error = output * (1-output) * sum  # Bepaal dan uiteindelijk de error.
+        for inp in self.input[-1]:
+            gradients.append(inp * error)  # De output van een voorgaande node is gelijk aan de input op deze node op de relevante index
+        for grad in gradients:
+            deltaweights.append(learningrate * grad)
+        deltabias = learningrate * error
+
+        self.error = error
+        self.__newweights = [self.__weights[i] - deltaweights[i] for i in range(len(self.getweights()))]
+        self.__newbias = self.getbias() - deltabias
 
     def update(self):
         """Updates the weights and bias using stored new weights and bias."""
