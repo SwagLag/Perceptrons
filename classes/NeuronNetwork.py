@@ -6,7 +6,7 @@ from typing import List, Union, Any  # Onschuldige library die alleen beter laat
 
 class NeuronNetwork:
     """Defines the neuron network; wraps all the given layers into this network."""
-    def __init__(self, layers: List[NeuronLayer], ID: Any = 0, learningrate: Union[int,float] = 0.3):
+    def __init__(self, layers: List[NeuronLayer], learningrate: Union[int,float] = 0.3, ID: Any = 0,):
         """Initialises a neuron network. Handles the connections between the layers."""
         self.hiddenlayers = layers
         self.learningrate = learningrate
@@ -15,6 +15,8 @@ class NeuronNetwork:
 
         self.ID = ID
         self.hasrun = False
+
+
 
     def feed_forward(self, inputs: List[Union[int,float]]) -> List[Union[int,float]]:
         """Starts the network, feeds in the inputs, runs it through all the layers and returns the output
@@ -66,8 +68,8 @@ class NeuronNetwork:
                 self.feed_forward(inputs[i])
                 self.backpropagation(actualoutputs[i])
                 self.update()
-                error = self.error(inputs,actualoutputs)
-                if error >= errortreshold:
+                error = self.error(inputs,actualoutputs)  # MSE
+                if error < errortreshold:
                     break
             epochs -= 1
 
@@ -99,7 +101,8 @@ class NeuronNetwork:
         if self.hasrun:
             output += "INPUT: {}\nV\n".format(self.input)
         for layer in self.hiddenlayers:
-            output += "{}\n".format([i.getweights() for i in layer.neurons])
+            for i in layer.neurons:
+                output += "[{} + {}]\n".format([round(x,4) for x in i.getweights()],round(i.getbias(),4))
             if self.hasrun:
                 output += "OUTPUT: {}\n".format(layer.outputs)
             output += "V\n"
