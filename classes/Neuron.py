@@ -4,7 +4,7 @@
 from typing import List, Union
 
 class Neuron:
-    """Neuron class. To initialise, takes a list of weights, an activation function and a bias (optional).
+    """Neuron class. To initialise, takes a list of weights, an activation function (normally Sigmoid().activate()), and a bias (optional).
     Once initialised, can be activated by giving a list of inputs (with equal elements to the amount of weights)"""
     def __init__(self, weights: List[Union[int, float]], activation: callable, ID=0, bias: Union[int,float] = 0.0):
         """Initialises the neuron."""
