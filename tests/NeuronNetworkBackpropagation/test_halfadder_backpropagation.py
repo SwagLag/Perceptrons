@@ -20,6 +20,8 @@ y = [[0,0],[1,0],[1,0],[0,1]]
 
 ntwrk.train(x,y,80000,0.001)
 print(ntwrk.__str__())
+
+print("MSE network:")
 print(ntwrk.error(x,y))
 
 print("Output should be close to [0,0]")

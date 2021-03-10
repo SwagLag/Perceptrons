@@ -19,6 +19,8 @@ y = [[0],[1],[1],[0]]
 
 ntwrk.train(x,y,40000,0.001)
 print(ntwrk.__str__())
+
+print("MSE network:")
 print(ntwrk.error(x,y))
 
 print("Should be as close as possible to high (1)")

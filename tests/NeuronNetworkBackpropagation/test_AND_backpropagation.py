@@ -9,8 +9,14 @@ l1 = NeuronLayer([n1])
 
 ntwrk = NeuronNetwork([l1],1)
 
-ntwrk.train([[0,0],[0,1],[1,0],[1,1]],[[0],[0],[0],[1]],1000,0.0000001)
+x = [[0,0],[0,1],[1,0],[1,1]]
+y = [[0],[0],[0],[1]]
+
+ntwrk.train(x,y,1000,0.0000001)
 print(ntwrk.__str__())
+
+print("MSE network:")
+print(ntwrk.error(x,y))
 
 print("Should be as close as possible to high (1)")
 print("[1,1] gives:")
