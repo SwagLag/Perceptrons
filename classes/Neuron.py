@@ -1,4 +1,4 @@
-# Perceptron class. Takes a list of inputs, applies a list of weights to them, adds a bias,
+# Neuron class. Takes a list of inputs, applies a list of weights to them, adds a bias,
 # then applies the sum of that to the activation function and returns an output.
 
 from typing import List, Union
