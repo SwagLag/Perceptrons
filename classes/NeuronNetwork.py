@@ -16,8 +16,6 @@ class NeuronNetwork:
         self.ID = ID
         self.hasrun = False
 
-
-
     def feed_forward(self, inputs: List[Union[int,float]]) -> List[Union[int,float]]:
         """Starts the network, feeds in the inputs, runs it through all the layers and returns the output
         of the final layer."""

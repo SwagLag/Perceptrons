@@ -1,4 +1,4 @@
-# PerceptronLayer defines the layers in the network. This is where the Neuron Class is used.
+# NeuronLayer defines the layers in the network. This is where the Neuron Class is used.
 
 # By default, all the Layers must be connected, so each neuron in the network must have equally as many
 # weights as one another, and the amount of weights on all perceptrons should equal the amount of connections from one layer to the

@@ -107,12 +107,12 @@ class Neuron:
         deltabias = 0
         newweights = []
         newbias = 0
-        sum = 0  # Sum of (Wi,j * Delta(j))
+        csum = 0  # Sum of (Wi,j * Delta(j))
         # Bepaal de error
         output = self.output[-1]
         for i in range(len(connections)):  # Bepaal eerst de som van de vermenigvuldigingen tussen de verbindingen en de errors.
-            sum += connections[i] * errors[i]
-        error = output * (1-output) * sum  # Bepaal dan uiteindelijk de error.
+            csum += connections[i] * errors[i]
+        error = output * (1-output) * csum  # Bepaal dan uiteindelijk de error.
         for inp in self.input[-1]:
             gradients.append(inp * error)  # De output van een voorgaande node is gelijk aan de input op deze node op de relevante index
         for grad in gradients:
