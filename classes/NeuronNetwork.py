@@ -68,9 +68,7 @@ class NeuronNetwork:
                 self.feed_forward(inputs[i])
                 self.backpropagation(actualoutputs[i])
                 self.update()
-                error = self.error(inputs,actualoutputs)  # MSE
-                if error < errortreshold:
-                    break
+            error = self.error(inputs,actualoutputs)  # MSE
             epochs -= 1
 
     def error(self, inputs: List[List[Union[int,float]]], actualoutputs: List[List[Union[int,float]]]) -> float:
